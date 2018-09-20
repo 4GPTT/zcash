@@ -3577,7 +3577,7 @@ UniValue z_getoperationstatus_IMPL(const UniValue& params, bool fRemoveFinishedO
 
 UniValue z_sendmany(const UniValue& params, bool fHelp)
 {
-    LogPrint("\n [z_sendmany]  in >> \n");
+    LogPrintf("\n [z_sendmany]  in >> \n");
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
 
@@ -3615,7 +3615,7 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
     bool fromTaddr = false;
     bool fromSapling = false;
 
-    LogPrint("[z_sendmany] fromaddress:%s \n", fromaddress.c_str());
+    LogPrintf("[z_sendmany] fromaddress:%s \n", fromaddress.c_str());
     CTxDestination taddr = DecodeDestination(fromaddress);
     fromTaddr = IsValidDestination(taddr);
     if (!fromTaddr) {
@@ -3834,7 +3834,7 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
     q->addOperation(operation);
     AsyncRPCOperationId operationId = operation->getId();
 
-    LogPrint("\n [z_sendmany] normal out << \n");
+    LogPrintf("\n [z_sendmany] normal out << \n");
     return operationId;
 }
 
