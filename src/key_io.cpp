@@ -44,6 +44,7 @@ public:
     std::string operator()(const CNoDestination& no) const { return {}; }
 };
 
+// 判断是否是合法的地址，然后判断是公钥的地址 还是脚本的地址
 CTxDestination DecodeDestination(const std::string& str, const CChainParams& params)
 {
     std::vector<unsigned char> data;
@@ -270,6 +271,7 @@ std::string EncodePaymentAddress(const libzcash::PaymentAddress& zaddr)
     return boost::apply_visitor(PaymentAddressEncoder(Params()), zaddr);
 }
 
+// 这个函数没看明白
 libzcash::PaymentAddress DecodePaymentAddress(const std::string& str)
 {
     std::vector<unsigned char> data;

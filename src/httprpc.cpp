@@ -89,6 +89,7 @@ static bool RPCAuthorized(const std::string& strAuth)
 
 static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
 {
+    LogPrintf(">> HTTPReq_JSONRPC in \n" );
     // JSONRPC handles only POST
     if (req->GetRequestMethod() != HTTPRequest::POST) {
         req->WriteReply(HTTP_BAD_METHOD, "JSONRPC server handles only POST requests");
@@ -119,7 +120,6 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
     try {
         // Parse request
         UniValue valRequest;
-        LogPrint(" [HTTPReq_JSONRPC] requestBody:%s \n", req->ReadBody() );
         if (!valRequest.read(req->ReadBody()))
             throw JSONRPCError(RPC_PARSE_ERROR, "Parse error");
 

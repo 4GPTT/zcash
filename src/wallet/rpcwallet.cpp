@@ -3619,7 +3619,6 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
     CTxDestination taddr = DecodeDestination(fromaddress);
     fromTaddr = IsValidDestination(taddr);
     if (!fromTaddr) {
-        // 如果是匿名地址
         auto res = DecodePaymentAddress(fromaddress);
         if (!IsValidPaymentAddress(res)) {
             // invalid

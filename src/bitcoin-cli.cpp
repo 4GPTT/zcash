@@ -190,6 +190,7 @@ UniValue CallRPC(const std::string& strMethod, const UniValue& params)
     std::string host = GetArg("-rpcconnect", "127.0.0.1");
     int port = GetArg("-rpcport", BaseParams().RPCPort());
 
+    printf(" >> rpcPort: %d \n", port);
     // Obtain event base
     raii_event_base base = obtain_event_base();
 
@@ -228,6 +229,7 @@ UniValue CallRPC(const std::string& strMethod, const UniValue& params)
 
     // Attach request data
     std::string strRequest = JSONRPCRequest(strMethod, params, 1);
+    printf(" >> strRequest:%s \n", strRequest.c_ster());
     struct evbuffer* output_buffer = evhttp_request_get_output_buffer(req.get());
     assert(output_buffer);
     evbuffer_add(output_buffer, strRequest.data(), strRequest.size());
