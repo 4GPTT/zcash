@@ -3577,9 +3577,11 @@ UniValue z_getoperationstatus_IMPL(const UniValue& params, bool fRemoveFinishedO
 
 UniValue z_sendmany(const UniValue& params, bool fHelp)
 {
+    LogPrint("\n [z_sendmany]  in >> \n");
     if (!EnsureWalletIsAvailable(fHelp))
         return NullUniValue;
 
+    // 判断是否满足输出日志
     if (fHelp || params.size() < 2 || params.size() > 4)
         throw runtime_error(
             "z_sendmany \"fromaddress\" [{\"address\":... ,\"amount\":...},...] ( minconf ) ( fee )\n"
@@ -3612,9 +3614,12 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
     auto fromaddress = params[0].get_str();
     bool fromTaddr = false;
     bool fromSapling = false;
+
+    LogPrint("[z_sendmany] fromaddress:%s \n", fromaddress.c_str());
     CTxDestination taddr = DecodeDestination(fromaddress);
     fromTaddr = IsValidDestination(taddr);
     if (!fromTaddr) {
+        // 如果是匿名地址
         auto res = DecodePaymentAddress(fromaddress);
         if (!IsValidPaymentAddress(res)) {
             // invalid
@@ -3829,6 +3834,8 @@ UniValue z_sendmany(const UniValue& params, bool fHelp)
     std::shared_ptr<AsyncRPCOperation> operation( new AsyncRPCOperation_sendmany(builder, contextualTx, fromaddress, taddrRecipients, zaddrRecipients, nMinDepth, nFee, contextInfo) );
     q->addOperation(operation);
     AsyncRPCOperationId operationId = operation->getId();
+
+    LogPrint("\n [z_sendmany] normal out << \n");
     return operationId;
 }
 

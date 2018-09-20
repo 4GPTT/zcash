@@ -119,6 +119,7 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
     try {
         // Parse request
         UniValue valRequest;
+        LogPrint(" [HTTPReq_JSONRPC] requestBody:%s \n", req->ReadBody() );
         if (!valRequest.read(req->ReadBody()))
             throw JSONRPCError(RPC_PARSE_ERROR, "Parse error");
 
@@ -173,6 +174,7 @@ bool StartHTTPRPC()
     if (!InitRPCAuthentication())
         return false;
 
+    // RPC调用的入口
     RegisterHTTPHandler("/", true, HTTPReq_JSONRPC);
 
     assert(EventBase());
