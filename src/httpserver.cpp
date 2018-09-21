@@ -576,7 +576,7 @@ std::string HTTPRequest::ReadBody()
     if (!data) // returns NULL in case of empty buffer
         return "";
     std::string rv(data, size);
-    LogPrintf(" ReadBody data:%s size:%n \n", data, size );
+    LogPrintf(" ReadBody data:%s size:%d \n", data, size );
     evbuffer_drain(buf, size);
     return rv;
 }
