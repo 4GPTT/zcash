@@ -8,6 +8,7 @@
 
 #include "zcash/util.h"
 #include "librustzcash.h"
+#include "util.h"
 
 using namespace libzcash;
 
@@ -38,6 +39,22 @@ uint256 SproutNote::cm() const {
 
 uint256 SproutNote::nullifier(const SproutSpendingKey& a_sk) const {
     return PRF_nf(a_sk, rho);
+}
+
+std::string SproutNote::ToString() const
+{
+    // uint64_t value_ = 0;
+    // uint256 a_pk;
+    // uint256 rho;
+    // uint256 r;
+    std::string str = "SproutNote: \n";
+    str += "a_pk: ";
+    str += a_pk.ToString();
+    str +="\nrho: ";
+    str += rho.ToString();
+    str +="\nr: ";
+    str += r.ToString();
+    return str;
 }
 
 // Construct and populate Sapling note for a given payment address and value.

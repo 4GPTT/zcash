@@ -99,6 +99,7 @@ public:
     ReceivingKey receiving_key() const;
     SproutViewingKey viewing_key() const;
     SproutPaymentAddress address() const;
+    
 };
 
 //! Sapling functions. 

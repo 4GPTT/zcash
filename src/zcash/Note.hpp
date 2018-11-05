@@ -38,6 +38,8 @@ public:
     uint256 cm() const;
 
     uint256 nullifier(const SproutSpendingKey& a_sk) const;
+
+    std::string ToString() const;
 };
 
 

@@ -1146,6 +1146,11 @@ UniValue AsyncRPCOperation_sendmany::perform_joinsplit(
         info.vjsout.push_back(JSOutput());
     }
 
+    // 展示JSInput 和 JSOutput
+    for( int i=0; i<ZC_NUM_JS_INPUTS; i++) {
+        showJSInput(info.vjsin[i]);
+    }
+
     if (info.vjsout.size() != ZC_NUM_JS_INPUTS || info.vjsin.size() != ZC_NUM_JS_OUTPUTS) {
         throw runtime_error("unsupported joinsplit input/output counts");
     }
@@ -1358,5 +1363,22 @@ UniValue AsyncRPCOperation_sendmany::getStatus() const {
     obj.push_back(Pair("method", "z_sendmany"));
     obj.push_back(Pair("params", contextinfo_ ));
     return obj;
+}
+
+void AsyncRPCOperation_sendmany::showJSInput(const JSInput& input)
+{
+    // SproutWitness witness;
+    // SproutNote note;
+    // SproutSpendingKey key;
+    LogPrint("zrpcunsafe", "%s\n", input.witness.ToString());
+
+    LogPrint("zrpcunsafe", "%s\n", input.note.ToString());
+
+    LogPrint("zrpcunsafe", " key: %s\n", input.key.ToString());
+}
+
+void AsyncRPCOperation_sendmany::showJSoutput(const JSOutput& output)
+{
+
 }
 

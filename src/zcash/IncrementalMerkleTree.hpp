@@ -14,6 +14,11 @@
 
 namespace libzcash {
 
+class Convert {
+public:
+    static std::string int_to_String(int n);
+};
+
 class MerklePath {
 public:
     std::vector<std::vector<bool>> authentication_path;
@@ -69,6 +74,20 @@ public:
     template <size_t D, typename H>
     friend bool operator==(const EmptyMerkleRoots<D, H>& a,
                            const EmptyMerkleRoots<D, H>& b);
+
+    std::string ToString() {
+        std::string str = "EmptyMerkleRoots: \n";
+        for(int i=0; i<Depth+1; i++ ) 
+        {
+            str += "depth:";
+            str += libzcash::Convert::int_to_String(i);
+            str += " ";
+            str += empty_roots[i].ToString();
+            str += "\n";
+        }
+        str += "\n";
+
+    };
 private:
     std::array<Hash, Depth+1> empty_roots;
 };
@@ -128,6 +147,8 @@ public:
     template <size_t D, typename H>
     friend bool operator==(const IncrementalMerkleTree<D, H>& a,
                            const IncrementalMerkleTree<D, H>& b);
+
+    std::string ToString() const;
 
 private:
     static EmptyMerkleRoots<Depth, Hash> emptyroots;
@@ -194,6 +215,8 @@ public:
     template <size_t D, typename H>
     friend bool operator==(const IncrementalWitness<D, H>& a,
                            const IncrementalWitness<D, H>& b);
+
+    std::string ToString() const;
 
 private:
     IncrementalMerkleTree<Depth, Hash> tree;

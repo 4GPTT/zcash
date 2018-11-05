@@ -127,6 +127,11 @@ private:
         std::vector<boost::optional < SproutWitness>> witnesses,
         uint256 anchor);
 
+    // 
+    void showJSInput(const JSInput& input);
+
+    void showJSoutput(const JSOutput& output);
+
     void sign_send_raw_transaction(UniValue obj);     // throws exception if there was an error
 
     // payment disclosure!

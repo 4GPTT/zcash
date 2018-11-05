@@ -11,6 +11,8 @@
 #include "uint256.h"
 #include "uint252.h"
 
+#include "util.h"
+
 #include <array>
 
 namespace libzcash {
