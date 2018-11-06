@@ -10,34 +10,6 @@
 
 namespace libzcash
 {
-
-std::string Convert::int_to_String(int n)
-{
-    int m = n;
-    char s[100];
-    char ss[100];
-    int i=0,j=0;
-    if (n < 0)// 处理负数
-    {
-        m = 0 - m;
-        j = 1;
-        ss[0] = '-';
-    }    
-    while (m>0)
-    {
-        s[i++] = m % 10 + '0';
-        m /= 10;
-    }
-    s[i] = '\0';
-    i = i - 1;
-    while (i >= 0)
-    {
-        ss[j++] = s[i--];
-    }    
-    ss[j] = '\0';    
-    return ss;
-}
-
 PedersenHash PedersenHash::combine(
     const PedersenHash& a,
     const PedersenHash& b,
@@ -391,22 +363,41 @@ template <size_t Depth, typename Hash>
 std::string IncrementalMerkleTree<Depth, Hash>::ToString() const
 {
     std::string str = emptyroots.ToString();
-    str += "left: ";
-    str += left->ToString();
-    str += "\n";
 
+    //LogPrint("zrpc", "%s\n", " ---> IncrementalMerkleTree222 <---");
+    if (left && left != boost::none) {
+        str += "left: ";
+        str += left->ToString();
+        str += "  ";
+    }
+    else {
+        str += "left = null  ";
+    }
+    //LogPrint("zrpc", "%s\n", " ---> IncrementalMerkleTree333 <---");
+
+    if (right && right != boost::none ) {
     str += "right: ";
     str += right->ToString();
-    str += "\n";
-
-    str = "parents: \n";
-    for (int i = 0; i < parents.size(); i++) {
-        str += libzcash::Convert::int_to_String(i);
-        str += " ";
-        str += parents[i]->ToString();
-        str += "\n";
+    str += "  ";
+    } else {
+        str += "right = null  ";
+    }
+    //LogPrint("zrpc", "%s\n", " ---> IncrementalMerkleTree444 <---");
+    str += "parents:  size ";
+    str += std::to_string(parents.size());
+    for (int i = 0; i < parents.size() && i<30; i++) {
+        str += " (";
+        str += std::to_string(i);
+        str += ")";
+        if(parents[i] && parents[i] == boost::none ) {
+            str += parents[i]->ToString();
+        } else {
+            str += " (null) ";
+        }
+        str += "  ";
     }
     str += "\n";
+    //LogPrint("zrpc", "%s\n", " ---> IncrementalMerkleTree5555<---");
 
     return str;
 }
@@ -414,31 +405,41 @@ std::string IncrementalMerkleTree<Depth, Hash>::ToString() const
 template <size_t Depth, typename Hash>
 std::string IncrementalWitness<Depth, Hash>::ToString() const
 {
+    //LogPrint("zrpc", "%s\n", " ---> IncrementalWitness <---");
     // IncrementalMerkleTree<Depth, Hash> tree;
     // std::vector<Hash> filled;
     // boost::optional<IncrementalMerkleTree<Depth, Hash>> cursor;
     // size_t cursor_depth = 0;
 
-    //   LogPrint("zrpcunsafe", "tree  %s\n", tree.toString());
-
     std::string str = "tree: ";
     str += tree.ToString();
 
-    str += "filled: \n";
+     //LogPrint("zrpc", "%s\n", " ---> IncrementalWitness 22<---");
+
+    //LogPrint("zrpc", "cursor  %s\n", cursor.toString());
+
+    str += "filled:  size ";
+    str += std::to_string( filled.size() );
     for (int i = 0; i < filled.size(); i++) {
-        str += libzcash::Convert::int_to_String(i);
-        str += " ";
+        str += " (";
+        str += std::to_string(i);
+        str += ")";
         str += filled[i].ToString();
-        str += "\n";
     }
+    str += "  ";
+    //LogPrint("zrpc", "%s\n", " ---> IncrementalWitness 33<---");
+
+    //LogPrint("zrpc", "cursor  %s\n", cursor.toString());
+    
+    if(cursor && cursor != boost::none ) {
+        str += cursor->ToString();
+    } else {
+        str += "cursor = null ";
+    }
+
+    //str += libzcash::Convert::int_to_String(cursor_depth);
+
     str += "\n";
-
-    //LogPrint("zrpcunsafe", "cursor  %s\n", cursor.toString());
-    str += cursor->ToString();
-
-    str += libzcash::Convert::int_to_String(cursor_depth);
-
-    str += "\n\n";
 
     //LogPrint("zrpcunsafe", "cursor_depth  %d \n", cursor_depth );
     return str;

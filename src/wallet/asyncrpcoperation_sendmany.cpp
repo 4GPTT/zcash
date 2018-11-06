@@ -377,6 +377,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
      */
     if (isUsingBuilder_) {
         builder_.SetFee(minersFee);
+        LogPrint("zrpc", " --> %s <-- \n", "isUsingBuilder_");
 
         // Get various necessary keys
         SaplingExpandedSpendingKey expsk;
@@ -502,7 +503,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
      * END SCENARIO #0
      */
 
-
+    LogPrint("zrpc", " --> 111 %s <-- \n", "main_impl");
     // Grab the current consensus branch ID
     {
         LOCK(cs_main);
@@ -518,6 +519,8 @@ bool AsyncRPCOperation_sendmany::main_impl() {
      */
     if (isPureTaddrOnlyTx) {
         add_taddr_outputs_to_tx();
+
+        LogPrint("zrpc", " --> %s <-- \n", "isPureTaddrOnlyTx");
         
         CAmount funds = selectedUTXOAmount;
         CAmount fundsSpent = t_outputs_total + minersFee;
@@ -540,7 +543,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
     /**
      * END SCENARIO #1
      */
-
+    LogPrint("zrpc", " --> 22222 %s <-- \n", "main_impl");
     
     // Prepare raw transaction to handle JoinSplits
     CMutableTransaction mtx(tx_);
@@ -562,7 +565,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
     for (auto o : z_outputs_) {
         zOutputsDeque.push_back(o);
     }
-
+    LogPrint("zrpc", " --> 3333 %s <-- \n", "main_impl");
     // When spending notes, take a snapshot of note witnesses and anchors as the treestate will
     // change upon arrival of new blocks which contain joinsplit transactions.  This is likely
     // to happen as creating a chained joinsplit transaction can take longer than the block interval.
@@ -578,7 +581,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
         }
     }
 
-
+    LogPrint("zrpc", " --> 3333 %s <-- \n", "main_impl");
     /**
      * SCENARIO #2
      * 
@@ -613,6 +616,8 @@ bool AsyncRPCOperation_sendmany::main_impl() {
             }
         }
 
+        LogPrint("zrpc", " --> yes %s <-- \n", "isfromtaddr_");
+
         // Create joinsplits, where each output represents a zaddr recipient.
         UniValue obj(UniValue::VOBJ);
         while (zOutputsDeque.size() > 0) {
@@ -637,6 +642,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
                 // Funds are removed from the value pool and enter the private pool
                 info.vpub_old += value;
             }
+            LogPrint("zrpc", " --> before %s <-- \n", "perform_joinsplit");
             obj = perform_joinsplit(info);
         }
         sign_send_raw_transaction(obj);
@@ -646,7 +652,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
      * END SCENARIO #2
      */   
  
-    
+    LogPrint("zrpc", " --> 4444 %s <-- \n", "main_impl");
     
     /**
      * SCENARIO #3
@@ -667,7 +673,7 @@ bool AsyncRPCOperation_sendmany::main_impl() {
         add_taddr_outputs_to_tx();
         vpubNewTarget += t_outputs_total;
     }
-
+    LogPrint("zrpc", " --> 5555 %s <-- \n", "main_impl");
     // Keep track of treestate within this transaction
     boost::unordered_map<uint256, SproutMerkleTree, CCoinsKeyHasher> intermediates;
     std::vector<uint256> previousCommitments;
@@ -1122,6 +1128,7 @@ UniValue AsyncRPCOperation_sendmany::perform_joinsplit(
         std::vector<boost::optional < SproutWitness>> witnesses,
         uint256 anchor)
 {
+    LogPrint("zrpc", " --> in %s <-- \n", "perform_joinsplit");
     if (anchor.IsNull()) {
         throw std::runtime_error("anchor is null");
     }
@@ -1146,10 +1153,12 @@ UniValue AsyncRPCOperation_sendmany::perform_joinsplit(
         info.vjsout.push_back(JSOutput());
     }
 
+    LogPrintf("before showJSInput \n");
     // 展示JSInput 和 JSOutput
     for( int i=0; i<ZC_NUM_JS_INPUTS; i++) {
         showJSInput(info.vjsin[i]);
     }
+    LogPrintf("after showJSInput \n");
 
     if (info.vjsout.size() != ZC_NUM_JS_INPUTS || info.vjsin.size() != ZC_NUM_JS_OUTPUTS) {
         throw runtime_error("unsupported joinsplit input/output counts");
@@ -1367,14 +1376,19 @@ UniValue AsyncRPCOperation_sendmany::getStatus() const {
 
 void AsyncRPCOperation_sendmany::showJSInput(const JSInput& input)
 {
+  //  LogPrint("zrpc"," ----> begin to print\n");
+
     // SproutWitness witness;
     // SproutNote note;
     // SproutSpendingKey key;
-    LogPrint("zrpcunsafe", "%s\n", input.witness.ToString());
+    LogPrint("zrpc", "\n\n%s\n", input.witness.ToString());
 
-    LogPrint("zrpcunsafe", "%s\n", input.note.ToString());
+    LogPrint("zrpc", "%s\n", input.note.ToString());
 
-    LogPrint("zrpcunsafe", " key: %s\n", input.key.ToString());
+    //std::cout<< "input.note.ToString():" <<input.note.ToString() << std::endl;
+
+     LogPrint("zrpc", " key: %s\n\n", input.key.ToString());
+
 }
 
 void AsyncRPCOperation_sendmany::showJSoutput(const JSOutput& output)

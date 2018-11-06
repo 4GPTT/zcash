@@ -47,13 +47,16 @@ std::string SproutNote::ToString() const
     // uint256 a_pk;
     // uint256 rho;
     // uint256 r;
-    std::string str = "SproutNote: \n";
-    str += "a_pk: ";
+    std::string str = "SproutNote: ";
+    str += "    a_pk: ";
     str += a_pk.ToString();
-    str +="\nrho: ";
+    str +="     rho: ";
     str += rho.ToString();
-    str +="\nr: ";
+    str +="     r: ";
     str += r.ToString();
+    str += "    value:";
+    str += std::to_string(value_);
+
     return str;
 }
 
