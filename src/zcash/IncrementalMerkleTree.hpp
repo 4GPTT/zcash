@@ -82,7 +82,7 @@ public:
         //for(auto iter = empty_roots.begin(); iter != empty_roots.end(); iter++)
         for (int i = 0; i < empty_roots.size(); i++) {
             str += " (";
-            str += libzcash::Convert::int_to_String(i);
+            str += std::to_string(i);
             str += ")";
             if (!empty_roots[i].IsNull()) {
                 str += empty_roots[i].ToString();
